@@ -90,17 +90,20 @@ public class Game{
                 int targetCol = targetX;
                 Sprite target = grid.getGrid()[targetRow][targetCol];
                 
-                // Interact with target
+                // Interact with target first
                 player.interact(size, direction, numTreasures, target);
                 
-                // If target was a Treasure or Trophy, replace it with a Dot
-                if (target instanceof Treasure || target instanceof Trophy) {
+                // Then move player
+                grid.placeSprite(player, direction);
+                
+                // If target was a Treasure (but not Trophy), replace it with a Dot
+                if (target instanceof Treasure && !(target instanceof Trophy)) {
                     grid.getGrid()[targetRow][targetCol] = new Dot(targetCol, size - 1 - targetRow);
                 }
+            } else {
+                // If target position is invalid, just move the player
+                grid.placeSprite(player, direction);
             }
-
-            // Move player
-            grid.placeSprite(player, direction);
         }
         scanner.close();
     }

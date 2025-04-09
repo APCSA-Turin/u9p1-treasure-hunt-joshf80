@@ -37,14 +37,15 @@ public class Player extends Sprite{
 
     //Interacts with an object at the specified position
     public void interact(int size, String direction, int numTreasures, Object obj) {
-        if (obj instanceof Treasure) {
-            treasureCount++;
-        } else if (obj instanceof Enemy) {
-            numLives--;
-        } else if (obj instanceof Trophy) {
+        if (obj instanceof Trophy) {
+            // Only check win condition, don't modify treasure count
             if (treasureCount >= numTreasures) {
                 win = true;
             }
+        } else if (obj instanceof Treasure) {
+            treasureCount++;
+        } else if (obj instanceof Enemy) {
+            numLives--;
         }
     }
 

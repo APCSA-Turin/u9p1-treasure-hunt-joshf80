@@ -50,8 +50,19 @@ public class Grid {
             newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
             // Replace current position with Dot
             grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
-            // Place sprite in new position
+            // Place sprite in new position, replacing whatever is there
             grid[newRow][newCol] = s;
+        } else {
+            // If new position is invalid, move sprite back
+            if (direction.equals("w")) {
+                s.move("s");
+            } else if (direction.equals("s")) {
+                s.move("w");
+            } else if (direction.equals("a")) {
+                s.move("d");
+            } else if (direction.equals("d")) {
+                s.move("a");
+            }
         }
     }
 
