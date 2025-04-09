@@ -27,7 +27,9 @@ public class Grid {
     public void placeSprite(Sprite s) {
         int row = size - 1 - s.getY(); //Conversion Cartesian plane -> Row Col form
         int col = s.getX();
-        grid[row][col] = s;
+        if (row >= 0 && row < size && col >= 0 && col < size) {
+            grid[row][col] = s;
+        }
     }
 
     // Places a sprite in a new position based on direction
@@ -35,13 +37,17 @@ public class Grid {
         // Remove sprite from current position
         int currentRow = size - 1 - s.getY();
         int currentCol = s.getX();
-        grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
+        if (currentRow >= 0 && currentRow < size && currentCol >= 0 && currentCol < size) {
+            grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
+        }
 
         // Place sprite in new position
         s.move(direction);
         int newRow = size - 1 - s.getY();
         int newCol = s.getX();
-        grid[newRow][newCol] = s;
+        if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
+            grid[newRow][newCol] = s;
+        }
     }
 
     // Displays the grid

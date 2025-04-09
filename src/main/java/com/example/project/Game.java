@@ -74,21 +74,23 @@ public class Game{
             int targetX = player.getX();
             int targetY = player.getY();
 
-            if (direction == "w") {
+            if (direction.equals("w")) {
                 targetY++;
-            } else if(direction == "s") {
+            } else if(direction.equals("s")) {
                 targetY--;
-            } else if(direction == "a") {
+            } else if(direction.equals("a")) {
                 targetX--;
-            } else if(direction == "d") {
+            } else if(direction.equals("d")) {
                 targetX++;
             }
 
             // Check for interactions
-            int targetRow = size - 1 - targetY;
-            int targetCol = targetX;
-            Sprite target = grid.getGrid()[targetRow][targetCol];
-            player.interact(size, direction, numTreasures, target);
+            if (targetX >= 0 && targetX < size && targetY >= 0 && targetY < size) {
+                int targetRow = size - 1 - targetY;
+                int targetCol = targetX;
+                Sprite target = grid.getGrid()[targetRow][targetCol];
+                player.interact(size, direction, numTreasures, target);
+            }
 
             // Move player
             grid.placeSprite(player, direction);

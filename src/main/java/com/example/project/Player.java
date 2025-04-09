@@ -41,8 +41,10 @@ public class Player extends Sprite{
             treasureCount++;
         } else if (obj instanceof Enemy) {
             numLives--;
-        } else if (obj instanceof Trophy && treasureCount == numTreasures) {
-            win = true;
+        } else if (obj instanceof Trophy) {
+            if (treasureCount >= numTreasures) {
+                win = true;
+            }
         }
     }
 
@@ -51,17 +53,15 @@ public class Player extends Sprite{
         int newX = getX();
         int newY = getY();
 
-
-        if (direction.toLowerCase() == "w") {
+        if (direction.equals("w")) {
             newY++;
-        } else if(direction.toLowerCase() == "s") {
+        } else if(direction.equals("s")) {
             newY--;
-        } else if(direction.toLowerCase() == "a") {
+        } else if(direction.equals("a")) {
             newX--;
-        } else if(direction.toLowerCase() == "d") {
+        } else if(direction.equals("d")) {
             newX++;
         }
-
 
         return newX >= 0 && newX < size && newY >= 0 && newY < size;
     }
