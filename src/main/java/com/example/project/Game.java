@@ -89,7 +89,14 @@ public class Game{
                 int targetRow = size - 1 - targetY;
                 int targetCol = targetX;
                 Sprite target = grid.getGrid()[targetRow][targetCol];
+                
+                // Interact with target
                 player.interact(size, direction, numTreasures, target);
+                
+                // If target was a Treasure or Trophy, replace it with a Dot
+                if (target instanceof Treasure || target instanceof Trophy) {
+                    grid.getGrid()[targetRow][targetCol] = new Dot(targetCol, size - 1 - targetRow);
+                }
             }
 
             // Move player

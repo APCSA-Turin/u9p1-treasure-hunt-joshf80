@@ -34,18 +34,23 @@ public class Grid {
 
     // Places a sprite in a new position based on direction
     public void placeSprite(Sprite s, String direction) {
-        // Remove sprite from current position
+        // Get current position
         int currentRow = size - 1 - s.getY();
         int currentCol = s.getX();
-        if (currentRow >= 0 && currentRow < size && currentCol >= 0 && currentCol < size) {
-            grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
-        }
-
-        // Place sprite in new position
+        
+        // Move the sprite
         s.move(direction);
+        
+        // Get new position
         int newRow = size - 1 - s.getY();
         int newCol = s.getX();
-        if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
+        
+        // Only update if both positions are valid
+        if (currentRow >= 0 && currentRow < size && currentCol >= 0 && currentCol < size &&
+            newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
+            // Replace current position with Dot
+            grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
+            // Place sprite in new position
             grid[newRow][newCol] = s;
         }
     }
