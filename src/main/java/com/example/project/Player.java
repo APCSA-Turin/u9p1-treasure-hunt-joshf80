@@ -1,36 +1,82 @@
 package com.example.project;
 
 //DO NOT DELETE ANY METHODS BELOW
-public class Player  {
+public class Player extends Sprite{
     private int treasureCount;
     private int numLives;
     private boolean win;
 
-    public Player(int x, int y) { //set treasureCount = 0 and numLives = 2 
+    // Constructor for Player class
+    public Player(int x, int y) {
+        super(x, y);
+        this.treasureCount = 0;
+        this.numLives = 2;
+        this.win = false;
     }
 
-
-    public int getTreasureCount(){return treasureCount;}
-    public int getLives(){return numLives;}
-    public boolean getWin(){return win;}
-
-  
-    //move method should override parent class, sprite
-    public void move(String direction) { //move the (x,y) coordinates of the player
+    // Gets the number of treasures collected
+    public int getTreasureCount() {
+        return treasureCount;
     }
 
-
-    public void interact(int size, String direction, int numTreasures, Object obj) { // interact with an object in the position you are moving to 
-    //numTreasures is the total treasures at the beginning of the game
+    // Gets the number of lives remaining
+    public int getLives() {
+        return numLives;
     }
 
-
-    public boolean isValid(int size, String direction){ //check grid boundaries
-        return false;
+    // Returns win status
+    public boolean getWin() {
+        return win;
     }
 
+    // Moves the player in the specified direction
+    @Override
+    public void move(String direction) {
+        super.move(direction); // Call Sprite class move
+    }
 
-   
+    //Interacts with an object at the specified position
+    public void interact(int size, String direction, int numTreasures, Object obj) {
+        if (obj instanceof Treasure) {
+            treasureCount++;
+        } else if (obj instanceof Enemy) {
+            numLives--;
+        } else if (obj instanceof Trophy && treasureCount == numTreasures) {
+            win = true;
+        }
+    }
+
+    // Checks if a move is valid and within grid bounds
+    public boolean isValid(int size, String direction) {
+        int newX = getX();
+        int newY = getY();
+
+
+        if (direction.toLowerCase() == "w") {
+            newY++;
+        } else if(direction.toLowerCase() == "s") {
+            newY--;
+        } else if(direction.toLowerCase() == "a") {
+            newX--;
+        } else if(direction.toLowerCase() == "d") {
+            newX++;
+        }
+
+
+        return newX >= 0 && newX < size && newY >= 0 && newY < size;
+    }
+
+    // Returns coordinates with "Player:" prefix
+    @Override
+    public String getCoords() {
+        return "Player:" + super.getCoords();
+    }
+
+    // Returns row column formatted coordinates with "Player:" prefix
+    @Override
+    public String getRowCol(int size) {
+        return "Player:" + super.getRowCol(size);
+    }
 }
 
 

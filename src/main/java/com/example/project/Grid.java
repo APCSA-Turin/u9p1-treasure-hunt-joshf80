@@ -1,36 +1,77 @@
 package com.example.project;
 
-
-//DO NOT DELETE ANY METHODS BELOW
-public class Grid{
+/**
+ * Represents the game grid that contains all sprites and manages positions
+ */
+public class Grid {
     private Sprite[][] grid;
     private int size;
 
-    public Grid(int size) { //initialize and create a grid with all DOT objects
+    // Constructor for Grid class
+    public Grid(int size) {
+        this.size = size;
+        this.grid = new Sprite[size][size];
+        
+        // Initialize grid with all Dot objects
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                grid[i][j] = new Dot(j, size - 1 - i);
+            }
+        }
     }
 
- 
-    public Sprite[][] getGrid(){return grid;}
+    // returns grid
+    public Sprite[][] getGrid() { return grid; }
 
-
-
-    public void placeSprite(Sprite s){ //place sprite in new spot
-
+    // Places a sprite at its current position
+    public void placeSprite(Sprite s) {
+        int row = size - 1 - s.getY(); //Conversion Cartesian plane -> Row Col form
+        int col = s.getX();
+        grid[row][col] = s;
     }
 
-    public void placeSprite(Sprite s, String direction) { //place sprite in a new spot based on direction
+    // Places a sprite in a new position based on direction
+    public void placeSprite(Sprite s, String direction) {
+        // Remove sprite from current position
+        int currentRow = size - 1 - s.getY();
+        int currentCol = s.getX();
+        grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
 
+        // Place sprite in new position
+        s.move(direction);
+        int newRow = size - 1 - s.getY();
+        int newCol = s.getX();
+        grid[newRow][newCol] = s;
     }
 
-
-    public void display() { //print out the current grid to the screen 
+    // Displays the grid
+    public void display() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                // Identify each sprite in the Grid, and print accordingly
+                if (grid[i][j] instanceof Player) { 
+                    System.out.print("🦄");
+                } else if (grid[i][j] instanceof Enemy) {
+                    System.out.print("🦂");
+                } else if (grid[i][j] instanceof Treasure) {
+                    System.out.print("🌈");
+                } else if (grid[i][j] instanceof Trophy) {
+                    System.out.print("🏆");
+                } else {
+                    System.out.print("⬜");
+                }
+            }
+            System.out.println();
+        }
     }
-    
-    public void gameover(){ //use this method to display a loss
+
+    // Displays the game over message
+    public void gameover() {
+        System.out.println("Game Over! You ran out of lives.");
     }
 
-    public void win(){ //use this method to display a win 
+    // Displays win message
+    public void win() {
+        System.out.println("Congratulations! You won the game!");
     }
-
-
 }

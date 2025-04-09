@@ -9,7 +9,11 @@ public class Game{
     private Trophy trophy;
     private int size; 
 
-    public Game(int size){ //the constructor should call initialize() and play()
+    // Initializes saved size for grid, and calls for initialization and game loop
+    public Game(int size) {
+        this.size = size;
+        initialize();
+        play();
     }
 
     public static void clearScreen() { //do not modify
@@ -28,11 +32,12 @@ public class Game{
         }
     }
 
-    public void play(){ //write your game logic here
+    // Main game loop that handles player input and game logic
+    public void play() {
         Scanner scanner = new Scanner(System.in);
+        int numTreasures = treasures.length;
 
-
-        while(true){
+        while (true) {
             try {
                 Thread.sleep(100); // Wait for 1/10 seconds
             } catch (InterruptedException e) {
@@ -40,19 +45,87 @@ public class Game{
             }
             clearScreen(); // Clear the screen at the beggining of the while loop
 
-     
+            // Display game state
+            System.out.println("Lives: " + player.getLives());
+            System.out.println("Treasures collected: " + player.getTreasureCount() + "/" + numTreasures);
+            grid.display();
+
+            // Check win/lose conditions
+            if (player.getLives() <= 0) {
+                grid.gameover();
+                break;
             }
-            
-     
+            if (player.getWin()) {
+                grid.win();
+                break;
+            }
+
+            // Get player input
+            System.out.print("Enter direction (w,a,s,d): ");
+            String direction = scanner.nextLine().toLowerCase();
+
+            // Validate move
+            if (!player.isValid(size, direction)) {
+                System.out.println("Invalid move! Try again.");
+                continue;
+            }
+
+            // Get target position
+            int targetX = player.getX();
+            int targetY = player.getY();
+
+            if (direction == "w") {
+                targetY++;
+            } else if(direction == "s") {
+                targetY--;
+            } else if(direction == "a") {
+                targetX--;
+            } else if(direction == "d") {
+                targetX++;
+            }
+
+            // Check for interactions
+            int targetRow = size - 1 - targetY;
+            int targetCol = targetX;
+            Sprite target = grid.getGrid()[targetRow][targetCol];
+            player.interact(size, direction, numTreasures, target);
+
+            // Move player
+            grid.placeSprite(player, direction);
+        }
+        scanner.close();
     }
 
-    public void initialize(){
+    // Initialized game objects
+    public void initialize() {
+        // Create grid
+        grid = new Grid(size);
 
-        //to test, create a player, trophy, grid, treasure, and enemies. Then call placeSprite() to put them on the grid
-   
+        // Create player at (0,0)
+        player = new Player(0, 0);
+        grid.placeSprite(player);
+
+        // Create enemies
+        enemies = new Enemy[2];
+        enemies[0] = new Enemy(7, 2);
+        enemies[1] = new Enemy(5, 4);
+        for (Enemy enemy : enemies) {
+            grid.placeSprite(enemy);
+        }
+
+        // Create treasures
+        treasures = new Treasure[2];
+        treasures[0] = new Treasure(1, 2);
+        treasures[1] = new Treasure(2, 7);
+        for (Treasure treasure : treasures) {
+            grid.placeSprite(treasure);
+        }
+        // Create trophy
+        trophy = new Trophy(9, 0);
+        grid.placeSprite(trophy);
     }
 
     public static void main(String[] args) {
-        
+        new Game(10); // set size to 10
     }
 }

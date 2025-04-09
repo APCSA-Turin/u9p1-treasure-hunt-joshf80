@@ -1,8 +1,9 @@
 package com.example.project;
 
-//only needs a constructor
-public class Treasure { //child of Sprite
+// Represents a treasure that the player can collect. Parent function of Trophy
+public class Treasure extends Sprite {//child of Sprite class
     public Treasure(int x, int y) {
+        super(x, y);
     }
 
 }
