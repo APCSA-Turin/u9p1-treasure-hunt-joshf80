@@ -1,7 +1,7 @@
 package com.example.project;
 
 //Base class for all game objects
-//Manages x,y coordinates and provides basic movement functionality
+//Manages x,y coordinates and provides basic movement stuff
 public class Sprite {
     private int x, y;
 
@@ -36,7 +36,7 @@ public class Sprite {
         return "(" + x + "," + y + ")";
     }
 
-    //Converts Cartesian coordinates to grid row/column format
+    //Converts Cartesian coordinates to grid row column format
     public String getRowCol(int size) {
         int row = size - 1 - y;
         int col = x;
@@ -46,15 +46,11 @@ public class Sprite {
     //Moves the sprite in the specified direction
     //Updates x,y coordinates based on movement direction
     public void move(String direction) {
-
-        if (direction.toLowerCase() == "w") { // forwards
-            y++;
-        } else if(direction.toLowerCase() == "s") { // backwards
-            y--;
-        } else if(direction.toLowerCase() == "a") { // left
-            x--;
-        } else if(direction.toLowerCase() == "d") { // right
-            x++;
+        switch (direction) {
+            case "w": y++; break;
+            case "s": y--; break;
+            case "a": x--; break;
+            case "d": x++; break;
         }
     }
 

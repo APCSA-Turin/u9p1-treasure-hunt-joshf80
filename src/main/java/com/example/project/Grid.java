@@ -1,13 +1,11 @@
 package com.example.project;
 
-/**
- * Represents the game grid that contains all sprites and manages positions
- */
+// Represents the game grid
 public class Grid {
     private Sprite[][] grid;
     private int size;
 
-    // Constructor for Grid class
+    // constructor for grid class
     public Grid(int size) {
         this.size = size;
         this.grid = new Sprite[size][size];
@@ -32,41 +30,39 @@ public class Grid {
         }
     }
 
-    // Places a sprite in a new position based on direction
+   // Places a sprite in a new position based on direction
     public void placeSprite(Sprite s, String direction) {
-        // Get current position
-        int currentRow = size - 1 - s.getY();
-        int currentCol = s.getX();
+        // Get current position before move
+        int oldRow = size - 1 - getOldY(s, direction);
+        int oldCol = getOldX(s, direction);
         
-        // Move the sprite
-        s.move(direction);
+        // Replaces old pos with Dot
+        grid[oldRow][oldCol] = new Dot(oldCol, size - 1 - oldRow);
         
-        // Get new position
+        // Place sprite at new pos
         int newRow = size - 1 - s.getY();
         int newCol = s.getX();
-        
-        // Only update if both positions are valid
-        if (currentRow >= 0 && currentRow < size && currentCol >= 0 && currentCol < size &&
-            newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
-            // Replace current position with Dot
-            grid[currentRow][currentCol] = new Dot(currentCol, size - 1 - currentRow);
-            // Place sprite in new position, replacing whatever is there
-            grid[newRow][newCol] = s;
-        } else {
-            // If new position is invalid, move sprite back
-            if (direction.equals("w")) {
-                s.move("s");
-            } else if (direction.equals("s")) {
-                s.move("w");
-            } else if (direction.equals("a")) {
-                s.move("d");
-            } else if (direction.equals("d")) {
-                s.move("a");
-            }
+        grid[newRow][newCol] = s;
+    }
+
+    // helper methods for the placeSprite method, used to convert previous position to Dot objects
+    private int getOldX(Sprite s, String direction) {
+        switch(direction) {
+            case "a": return s.getX() + 1;
+            case "d": return s.getX() - 1;
+            default: return s.getX();
         }
     }
 
-    // Displays the grid
+    private int getOldY(Sprite s, String direction) {
+        switch(direction) {
+            case "w": return s.getY() - 1;
+            case "s": return s.getY() + 1;
+            default: return s.getY();
+        }
+    }
+        
+    // Displays the 2d grid array
     public void display() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -75,24 +71,24 @@ public class Grid {
                     System.out.print("🦄");
                 } else if (grid[i][j] instanceof Enemy) {
                     System.out.print("🦂");
-                } else if (grid[i][j] instanceof Treasure) {
-                    System.out.print("🌈");
-                } else if (grid[i][j] instanceof Trophy) {
+                } else if (grid[i][j] instanceof Trophy) { // trophy must come before treasure, since it is a child of treasure and would be true
                     System.out.print("🏆");
-                } else {
+                } else if (grid[i][j] instanceof Treasure) {
+                    System.out.print("💰");
+                } else if (grid[i][j] instanceof Dot) {
                     System.out.print("⬜");
                 }
             }
-            System.out.println();
+            System.out.println(); // Move to next row after printing full row
         }
     }
 
-    // Displays the game over message
+    // Displays game over message
     public void gameover() {
         System.out.println("Game Over! You ran out of lives.");
     }
 
-    // Displays win message
+    // Displays win
     public void win() {
         System.out.println("Congratulations! You won the game!");
     }

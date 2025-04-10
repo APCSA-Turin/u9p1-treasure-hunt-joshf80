@@ -6,7 +6,7 @@ public class Player extends Sprite{
     private int numLives;
     private boolean win;
 
-    // Constructor for Player class
+    // Constructor for Player class - stores player info like lives left and treasures collected
     public Player(int x, int y) {
         super(x, y);
         this.treasureCount = 0;
@@ -14,12 +14,12 @@ public class Player extends Sprite{
         this.win = false;
     }
 
-    // Gets the number of treasures collected
+    // returns treasures collected
     public int getTreasureCount() {
         return treasureCount;
     }
 
-    // Gets the number of lives remaining
+    // returns lives remaining
     public int getLives() {
         return numLives;
     }
@@ -29,20 +29,19 @@ public class Player extends Sprite{
         return win;
     }
 
-    // Moves the player in the specified direction
+    // calls super method
     @Override
     public void move(String direction) {
-        super.move(direction); // Call Sprite class move
+        super.move(direction);
     }
 
     //Interacts with an object at the specified position
     public void interact(int size, String direction, int numTreasures, Object obj) {
-        if (obj instanceof Trophy) {
-            // Only check win condition, don't modify treasure count
-            if (treasureCount >= numTreasures) {
+        if (obj instanceof Trophy) { 
+            if (treasureCount == numTreasures) {
                 win = true;
             }
-        } else if (obj instanceof Treasure) {
+        } else if (obj instanceof Treasure && !(obj instanceof Trophy)) {
             treasureCount++;
         } else if (obj instanceof Enemy) {
             numLives--;
@@ -67,18 +66,15 @@ public class Player extends Sprite{
         return newX >= 0 && newX < size && newY >= 0 && newY < size;
     }
 
-    // Returns coordinates with "Player:" prefix
+    // Returns coords with "Player:"
     @Override
     public String getCoords() {
         return "Player:" + super.getCoords();
     }
 
-    // Returns row column formatted coordinates with "Player:" prefix
+    // Returns row column formatted coords with "Player:"
     @Override
     public String getRowCol(int size) {
         return "Player:" + super.getRowCol(size);
     }
 }
-
-
-
